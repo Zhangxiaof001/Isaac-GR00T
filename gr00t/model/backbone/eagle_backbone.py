@@ -99,9 +99,15 @@ class EagleBackbone(nn.Module):
         if use_local_eagle_hg_model:
             model_name = DEFAULT_EAGLE_MODEL_NAME
 
+        # 加载模型的配置文件, 返回一个配置类实例
         config = AutoConfig.from_pretrained(model_name, trust_remote_code=True)
+        # 根据配置文件创建一个模型实例
         self.model = AutoModel.from_config(config, trust_remote_code=True)
+        # Noisy Embedding Fine-Tuning: 在微调过程中向嵌入层添加噪声
         self.model.neftune_alpha = None
+        
+        print("Eagle-2 Model architecture:")
+        print(self.model)
 
         if hasattr(self.model.vision_model, "vision_model") and hasattr(
             self.model.vision_model.vision_model, "head"
@@ -198,3 +204,8 @@ class EagleBackbone(nn.Module):
                 "backbone_attention_mask": attention_mask,
             }
         )  # [B, T2, hidden_size]
+        
+if __name__ == "__main__":
+    
+    backbone = EagleBackbone()
+

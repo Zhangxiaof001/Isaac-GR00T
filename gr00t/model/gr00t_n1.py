@@ -78,7 +78,9 @@ class GR00T_N1(PreTrainedModel):
         super().__init__(config)
         self.local_model_path = local_model_path
 
+        # VLM backbone
         self.backbone = EagleBackbone(**config.backbone_cfg)
+        # action policy
         action_head_cfg = FlowmatchingActionHeadConfig(**config.action_head_cfg)
         self.action_head = FlowmatchingActionHead(action_head_cfg)
 
